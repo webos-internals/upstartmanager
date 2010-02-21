@@ -22,7 +22,7 @@ UsMgrAssistant.prototype.setup = function() {
 		swipeToDelete: false,
 		reorderable: true,
 		lookahead: 30,
-		renderLimit: 40
+		//renderLimit: 40
 		
 	};
 	Mojo.Log.info("Set up list model");
