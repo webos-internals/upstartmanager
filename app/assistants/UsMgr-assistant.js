@@ -21,9 +21,7 @@ UsMgrAssistant.prototype.setup = function() {
 		itemTemplate: 'UsMgr/itemTemplate',
 		swipeToDelete: false,
 		reorderable: true,
-		lookahead: 30,
-		//renderLimit: 40
-		
+		lookahead: 30,		
 	};
 	Mojo.Log.info("Set up list model");
 
