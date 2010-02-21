@@ -20,9 +20,9 @@ UsMgrAssistant.prototype.setup = function() {
 		// Template for how to display list items
 		itemTemplate: 'UsMgr/itemTemplate',
 		swipeToDelete: false,
-		reorderable: false,
-		lookahead: 30,
-		renderLimit: 40
+		reorderable: true,
+		lookahead: 60,
+		renderLimit: 60
 		
 	};
 	Mojo.Log.info("Set up list model");
@@ -41,7 +41,7 @@ UsMgrAssistant.prototype.setup = function() {
 		visible:true,
 		items:[
 			{label:"Sort by name",command:"sn"}
-			,{label:"Sort by state",command:"sst"}
+			,{label:"Sort by state",command:"st"}
 			,{label:"Sort by status",command:"sss"}
 		]
 	});
@@ -65,14 +65,17 @@ UsMgrAssistant.prototype.handleCommand = function(event) {
 		{
 			case 'sn':
 				this.sortPref = "name";
+				Mojo.Log.info("Sort by name set");
 				f(this.lastList);
 				break;
 			case 'st':
 				this.sortPref = "state";
+				Mojo.Log.info("Sort by state set");
 				f(this.lastList);
 				break;
 			case 'sss':
 				this.sortPref = "status";
+				Mojo.Log.info("Sort by status set");
 				f(this.lastList);
 				break;
 			default: break;
@@ -207,38 +210,51 @@ UsMgrAssistant.prototype.appendList = function(event) {
 	/* save event */
 	this.lastList = event;
 	/* Used for debugging purposes */
-	//for (var i in event.jobs[0]) {Mojo.Log.info(i);}
+	for (var i in event.jobs[1]) {Mojo.Log.info(i);}
 	/* sort by preference */
+	
+	
 	var sorter = function (a,b) {
-		var x = a;
-		var y = b;
 		if (this.sortPref == 'name')
 		{
-    		x = a.name.toLowerCase();
-    		y = b.name.toLowerCase();
+    		var x = a.name.toLowerCase();
+    		var y = b.name.toLowerCase();
+			Mojo.Log.info("Sort by name");
+			return ((x < y) ? -1 : ((x > y) ? 1 : 0));
 		}
 		if (this.sortPref == 'state')
 		{
-    		x = a.state.toLowerCase();
-    		y = b.state.toLowerCase();
+    		var x = a.state.toLowerCase();
+    		var y = b.state.toLowerCase();
+			Mojo.Log.info("Sort by state");
+			return ((x < y) ? -1 : ((x > y) ? 1 : 0));
 		}
 		if (this.sortPref == 'status')
 		{
-    		x = a.status.toLowerCase();
-    		y = b.status.toLowerCase();
+    		var x = a.status.toLowerCase();
+    		var y = b.status.toLowerCase();
+			Mojo.Log.info("Sort by status");
+			return ((x < y) ? -1 : ((x > y) ? 1 : 0));
 		}
 		else
 		{
 			return 0;
 		}
-		return ((x < y) ? 1 : (x > y) ? -1 : 0);
 	}
 	/* Array holding all the processes */
 	var services = new Array();
-	//Mojo.Log.info("Add processes to list");
-	services = event.jobs
+	Mojo.Log.info("Add services to list");
+	//shorten the status to just the first word	(A.K.A. cut it off at the first comma)
+	var docLength = event.jobs.length;
+	for (var i = 0; i < docLength; i++) {
+		var shortstatus=event.jobs[i].status.split(",");
+		event.jobs[i].status = shortstatus[0]		
+	}	
+	//services = event.jobs
 	/* Sort list */
-	services = services.sort(sorter.bind(this));
+	//services = services.sort(sorter.bind(this));
+	var services = new Array();
+	services = event.jobs.sort(sorter.bind(this));
 	/* Add the list of processes to the GUI list */
 	this.controller.get("UsMgr_list").mojo.setLength(services.length);
 	this.controller.get("UsMgr_list").mojo.noticeUpdatedItems(0,services);
