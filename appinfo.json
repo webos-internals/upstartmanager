@@ -1,0 +1,10 @@
+{
+	"id": "com.palm.cryptk.upstartmanager",
+	"version": "0.0.1",
+	"vendor": "CryptK",
+	"type": "web",
+	"main": "index.html",
+	"title": "Upstart Manager",
+	"icon": "icon.png",
+	"removable": "true"
+}

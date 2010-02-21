@@ -1,0 +1,7 @@
+[
+    {"source": "app/assistants/stage-assistant.js"},
+    {
+        "scenes": "UsMgr",
+        "source": "app/assistants/UsMgr-assistant.js"
+    }
+]
