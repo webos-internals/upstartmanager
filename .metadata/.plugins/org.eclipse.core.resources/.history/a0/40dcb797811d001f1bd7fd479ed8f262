@@ -1,7 +1,0 @@
-[
-    {"source": "app/assistants/stage-assistant.js"},
-    {
-        "scenes": "SMgr",
-        "source": "app/assistants/SMgr-assistant.js"
-    }
-]
