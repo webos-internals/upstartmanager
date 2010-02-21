@@ -90,7 +90,23 @@ UsMgrAssistant.prototype.handleTap = function(event) {
 
 /* Confirm that you REALLY want to kill this item */
 UsMgrAssistant.prototype.serviceControl = function(event) {
-	var f = this.serviceControl.bind(this);
+	var f = this.toggleService.bind(this);
+	var statusText = newStatusText = labelText = event.item.state;
+	Mojo.Log.info(event.item.status);
+	//format the service state into more engrish friendly words
+	if (event.item.state == "stop"){
+		statusText = "stopped";
+		newStatusText = "start";
+	}
+	else if (event.item.state == "start"){
+		statusText = "running";
+		newStatusText = "stop";
+	}
+	else{
+		statusText = event.item.status
+	}
+	var titleText = event.item.name + " is " + statusText + ". Would you like to " + newStatusText + " it?";
+	labelText = newStatusText + " it!";
 	var affirm = function(transport)
 	{
 		if (transport)
@@ -100,18 +116,18 @@ UsMgrAssistant.prototype.serviceControl = function(event) {
 	}
 	this.controller.showAlertDialog({
 		onChoose:affirm,
-		title:"Are you sure?",
+		title:titleText,
 		choices:[
-			{label:"Kill it!",value:true,type:'affirmative'},
+			{label:labelText,value:true,type:'affirmative'},
 			{label:"No, don't do that!", value:false,type:'negative'}
 		]
 	});
 }
 
 /* Kills an app by pid# */
-UsMgrAssistant.prototype.killProcess = function(event) {
+UsMgrAssistant.prototype.toggleService = function(event) {
 	/* Make sure the click event came from a list item */
-	Mojo.Log.info("Going to kill pid: " + event.item.pid);
+	Mojo.Log.info("Going to kill pid: " + event.item.name);
 	/* Call the Application Manager to kill the selection process */
 	this.controller.serviceRequest('palm://com.palm.applicationManager', {
 		method: 'close',
