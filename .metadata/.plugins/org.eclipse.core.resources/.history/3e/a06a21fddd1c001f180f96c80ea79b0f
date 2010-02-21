@@ -1,0 +1,9 @@
+{
+	"id": "com.palm.servicemanager",
+	"version": "0.0.1",
+	"vendor": "Palm",
+	"type": "web",
+	"main": "index.html",
+	"title": "Service manager",
+	"icon": "icon.png"
+}

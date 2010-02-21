@@ -1,0 +1,7 @@
+<div class="palm-row" x-mojo-tap-highlight="delayed" renderLimit="40" lookahead="30">
+	<div class="palm-row-wrapper" renderLimit="40" lookahead="30">
+		<div class="name">#{name}</div>
+		<div class="state">#{state}</div>
+		<div class="status">#{status}</div>
+	</div>
+</div>

@@ -1,0 +1,19 @@
+<div class="palm-page-header multi-line">
+	<div class="palm-page-header-wrapper">
+		<div class="header">Service Manager</div>
+		<div class="list-header-wrapper">
+			<div class="name">Name</div>
+			<div class="state">State</div>
+			<div class="status">status</div>
+			<br class="clear" />
+		</div>
+	</div>
+</div>
+
+<div class="palm-header-spacer"></div>
+
+<div class="palm-list">
+	<div x-mojo-element="List" id="UsMgr_list" renderLimit="40" lookahead="30"></div>
+</div>
+
+<div class="fade-bottom" x-mojo-scroll-fade="bottom"></div>

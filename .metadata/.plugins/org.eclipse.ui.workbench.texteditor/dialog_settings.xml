@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section name="Workbench">
+	<section name="com.aptana.ide.ui.editors.FindReplaceDialog">
+		<item value="false" key="wrap"/>
+		<item value="false" key="isRegEx"/>
+		<item value="false" key="casesensitive"/>
+		<item value="false" key="isMultiLine"/>
+		<item value="false" key="shouldEscape"/>
+		<item value="false" key="incremental"/>
+		<item value="false" key="wholeword"/>
+		<item value="list" key="selection"/>
+		<list key="findhistory">
+			<item value="list"/>
+			<item value="formatSize"/>
+			<item value="Name"/>
+			<item value="state"/>
+			<item value="sorter"/>
+			<item value="bad app"/>
+			<item value="badapp"/>
+			<item value="updateList"/>
+		</list>
+		<list key="replacehistory">
+			<item value="status"/>
+			<item value="state"/>
+			<item value="UsMgr"/>
+			<item value="UsMgrAssistant"/>
+			<item value="jobs"/>
+			<item value="SMgr_list"/>
+			<item value="SMgrAssistant"/>
+		</list>
+	</section>
+	<section name="com.aptana.ide.ui.editors.FindReplaceDialog_dialogBounds">
+		<item value="407" key="DIALOG_WIDTH"/>
+		<item value="359" key="DIALOG_Y_ORIGIN"/>
+		<item value="463" key="DIALOG_HEIGHT"/>
+		<item value="1197" key="DIALOG_X_ORIGIN"/>
+		<item value="1|Sans|10.0|0|GTK|1|" key="DIALOG_FONT_NAME"/>
+	</section>
+</section>
