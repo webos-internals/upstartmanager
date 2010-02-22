@@ -47,11 +47,11 @@ UsMgrAssistant.prototype.setup = function() {
 	/* add event handlers to listen to events from widgets */
 
 	/* Set up the listener for tapping on list items */
-	this.controller.listen("UsMgr_list", Mojo.Event.listTap, this.handleTap.bind(this));
+	this.controller.listen("UsMgr_list", Mojo.Event.listTap, this.serviceControl.bind(this));
 	/* Default sort preference is by # of open service handles */
 	this.sortPref = "name";
 	//this.interval = setInterval(this.updateList.bind(this),5000);
-	/* Holder of the last process list, keep it around so reordering list doesn't need to poll lunastats */
+	/* Holder of the last process list, keep it around so reordering list doesn't need to poll upstartmgr */
 	this.lastList = {};
 }
 
@@ -80,13 +80,6 @@ UsMgrAssistant.prototype.handleCommand = function(event) {
 			default: break;
 		}
 	}
-}
-
-
-/* Handle the tap on the list item */
-UsMgrAssistant.prototype.handleTap = function(event) {
-	var f = this.serviceControl.bind(this);
-	f(event);
 }
 
 /* Confirm that you REALLY want to toggle this item */
@@ -150,7 +143,6 @@ UsMgrAssistant.prototype.activate = function(event) {
 	f();
 }
 
-
 UsMgrAssistant.prototype.deactivate = function(event) {
 	/* remove any event handlers you added in activate and do any other cleanup that should happen before
 	   this scene is popped or another scene is pushed on top */
@@ -164,7 +156,7 @@ UsMgrAssistant.prototype.cleanup = function(event) {
 
 /* Calls the service which knows about application statistics */
 UsMgrAssistant.prototype.updateList = function() {
-	var request = new Mojo.Service.Request
+	var request = this.controller.serviceRequest
 	(
 		UsMgrAssistant.prototype.identifier,
 		{
@@ -179,7 +171,7 @@ UsMgrAssistant.prototype.updateList = function() {
 
 UsMgrAssistant.prototype.startService = function(id)
 {
-	var request = new Mojo.Service.Request
+	var request = this.controller.serviceRequest
 	(
 		UsMgrAssistant.prototype.identifier,
 		{
@@ -188,7 +180,7 @@ UsMgrAssistant.prototype.startService = function(id)
 			{
 				'id': id
 			},
-			onSuccess: this.updateList.bind(this),
+			onSuccess: this.updateList.bind(this)
 		}
 	);
 	return request;
@@ -196,7 +188,7 @@ UsMgrAssistant.prototype.startService = function(id)
 
 UsMgrAssistant.prototype.stopService = function(id)
 {
-	var request = new Mojo.Service.Request
+	var request = this.controller.serviceRequest
 	(
 		UsMgrAssistant.prototype.identifier,
 		{
