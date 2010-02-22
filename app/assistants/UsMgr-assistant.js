@@ -88,7 +88,7 @@ UsMgrAssistant.prototype.handleTap = function(event) {
 	f(event);
 }
 
-/* Confirm that you REALLY want to kill this item */
+/* Confirm that you REALLY want to toggle this item */
 UsMgrAssistant.prototype.serviceControl = function(event) {
 	var f = this.toggleService.bind(this);
 	var statusText = newStatusText = labelText = event.item.state;
@@ -124,20 +124,20 @@ UsMgrAssistant.prototype.serviceControl = function(event) {
 	});
 }
 
-/* Kills an app by pid# */
+/* Launches a service by name */
 UsMgrAssistant.prototype.toggleService = function(event) {
 	/* Make sure the click event came from a list item */
-	Mojo.Log.info("Going to kill pid: " + event.item.name);
+	Mojo.Log.info("Toggling service: " + event.item.name);
+	var id = event.item.name
 	/* Call the Application Manager to kill the selection process */
-	this.controller.serviceRequest('palm://com.palm.applicationManager', {
-		method: 'close',
-		/* The pid is used as the processId */
-		parameters: {processId:event.item.pid},
-		/* Redraw the list on success */
-		onSuccess: this.updateList.bind(this),
-		/* Do nothing on failure. This operation should NEVER FAIL */
-		onFailure: function(){Mojo.Log.error("OH GOD A CLOSE FAILED");}
-	});
+	if (event.item.state == "stop") {
+		//this.startService(this.handleStart.bindAsEventListener(this), event.item.name);
+		this.startService(event.item.name);
+	}
+	if (event.item.state == "start") {
+		//this.startService(this.handleStart.bindAsEventListener(this), event.item.name);
+		this.stopService(event.item.name);
+	}
 }
 
 UsMgrAssistant.prototype.activate = function(event) {
@@ -162,15 +162,6 @@ UsMgrAssistant.prototype.cleanup = function(event) {
 }
 
 /* Calls the service which knows about application statistics */
-//UsMgrAssistant.prototype.updateList = function() {
-//	/* Message com.palm.lunastats to give the VM stats */
-//	this.controller.serviceRequest('luna://org.webosinternals.upstartmgr/list', {
-//		method: 'list',
-//		//For some reason, onSuccess never happens :(
-//		onComplete: this.appendList.bind(this),
-//	});
-//}
-
 UsMgrAssistant.prototype.updateList = function() {
 	var request = new Mojo.Service.Request
 	(
@@ -178,42 +169,42 @@ UsMgrAssistant.prototype.updateList = function() {
 		{
 			method: 'list',
 			parameters: {subscribe:true},
-			onComplete: this.appendList.bind(this),
+			onSuccess: this.appendList.bind(this),
 		}
 	);
 	Mojo.Log.info("List Grabbed");
 	return request;
 }
 
-UsMgrAssistant.startService = function(callback, id) {
+UsMgrAssistant.prototype.startService = function(id)
+{
 	var request = new Mojo.Service.Request
 	(
-		UsMgrAssistant.identifier,
+		UsMgrAssistant.prototype.identifier,
 		{
 			method: 'start',
 			parameters:
 			{
 				'id': id
 			},
-			onSuccess: callback,
-			onFailure: callback
+			onSuccess: this.updateList.bind(this),
 		}
 	);
 	return request;
 }
 
-UsMgrAssistant.stopService = function(callback, id) {
+UsMgrAssistant.prototype.stopService = function(id)
+{
 	var request = new Mojo.Service.Request
 	(
-		UpstartService.identifier,
+		UsMgrAssistant.prototype.identifier,
 		{
 			method: 'stop',
 			parameters:
 			{
 				'id': id
 			},
-			onSuccess: callback,
-			onFailure: callback
+			onSuccess: this.updateList.bind(this),
 		}
 	);
 	return request;
@@ -264,9 +255,7 @@ UsMgrAssistant.prototype.appendList = function(event) {
 		var shortstatus=event.jobs[i].status.split(",");
 		event.jobs[i].status = shortstatus[0]		
 	}	
-	//services = event.jobs
 	/* Sort list */
-	//services = services.sort(sorter.bind(this));
 	var services = new Array();
 	services = event.jobs.sort(sorter.bind(this));
 	/* Add the list of processes to the GUI list */
