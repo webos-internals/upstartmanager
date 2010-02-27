@@ -9,7 +9,9 @@ UsMgrAssistant.prototype.identifier = 'palm://org.webosinternals.upstartmgr';
 
 UsMgrAssistant.prototype.setup = function() {
 	/* this function is for setup tasks that have to happen when the scene is first created */
-
+	
+	/* Making the app orientation aware */
+	if (this.controller.stageController.setWindowOrientation) { this.controller.stageController.setWindowOrientation("free"); }
 	/* use Mojo.View.render to render view templates and add them to the scene, if needed. */
 
 	/* setup widgets here */
